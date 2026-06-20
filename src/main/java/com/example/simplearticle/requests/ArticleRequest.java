@@ -1,22 +1,12 @@
 package com.example.simplearticle.requests;
 
-public class ArticleRequest {
-    private String title;
-    private String content;
+import jakarta.validation.constraints.NotBlank;
 
-    public String getTitle() {
-        return title;
-    }
+public record ArticleRequest(
+        @NotBlank(message = "Title is required")
+        String title,
 
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
+        @NotBlank(message = "Content is required")
+        String content
+) {
 }
