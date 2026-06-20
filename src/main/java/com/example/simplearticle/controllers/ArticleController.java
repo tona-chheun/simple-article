@@ -4,6 +4,7 @@ import com.example.simplearticle.requests.ArticleRequest;
 import com.example.simplearticle.response.ApiResponse;
 import com.example.simplearticle.response.ArticleResponse;
 import com.example.simplearticle.services.ArticleService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("articles")
+@RequestMapping("api/articles")
+@SecurityRequirement(name = "bearerAuth")
 public class ArticleController {
     private final ArticleService articleService;
 

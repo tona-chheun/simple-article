@@ -4,6 +4,7 @@ import com.example.simplearticle.requests.CommentRequest;
 import com.example.simplearticle.response.ApiResponse;
 import com.example.simplearticle.response.CommentResponse;
 import com.example.simplearticle.services.CommentService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/articles/{articleId}/comments")
+@SecurityRequirement(name = "bearerAuth")
 public class CommentController {
     private final CommentService commentService;
 
