@@ -1,10 +1,9 @@
 package com.example.simplearticle.controllers;
 
 import com.example.simplearticle.models.Article;
+import com.example.simplearticle.requests.ArticleRequest;
 import com.example.simplearticle.services.ArticleService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -20,5 +19,10 @@ public class ArticleController {
     @GetMapping
     public List<Article> getAll() {
         return this.articleService.getAll();
+    }
+
+    @PostMapping
+    public Article create(@RequestBody ArticleRequest articleRequest) {
+        return this.articleService.create(articleRequest);
     }
 }

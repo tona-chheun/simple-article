@@ -1,12 +1,24 @@
 package com.example.simplearticle.models;
 
+import jakarta.persistence.*;
+
+@Entity
+@Table(name = "articles")
 public class Article {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String content;
 
     public Article() {
 
+    }
+
+    public Article(String title, String content) {
+        this.title = title;
+        this.content = content;
     }
 
     public Article(Long id, String title, String content) {
