@@ -14,6 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/articles")
+@SecurityRequirement(name = "ApiKeyAuth")
 @SecurityRequirement(name = "bearerAuth")
 public class ArticleController {
     private final ArticleService articleService;

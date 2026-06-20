@@ -6,6 +6,7 @@ import com.example.simplearticle.response.ApiResponse;
 import com.example.simplearticle.response.AuthResponse;
 import com.example.simplearticle.response.UserResponse;
 import com.example.simplearticle.services.AuthService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("api/auth")
+@SecurityRequirement(name = "ApiKeyAuth")
 public class AuthController {
     private final AuthService authService;
 

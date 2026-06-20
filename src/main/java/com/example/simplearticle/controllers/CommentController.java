@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/articles/{articleId}/comments")
+@SecurityRequirement(name = "ApiKeyAuth")
 @SecurityRequirement(name = "bearerAuth")
 public class CommentController {
     private final CommentService commentService;

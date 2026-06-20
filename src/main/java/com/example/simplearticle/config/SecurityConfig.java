@@ -1,5 +1,6 @@
 package com.example.simplearticle.config;
 
+import com.example.simplearticle.security.ApiKeyFilter;
 import com.example.simplearticle.security.JwtAuthFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,9 +21,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
     private final JwtAuthFilter jwtAuthFilter;
+    private final ApiKeyFilter apiKeyFilter;
 
-    public SecurityConfig(JwtAuthFilter jwtAuthFilter) {
+    public SecurityConfig(JwtAuthFilter jwtAuthFilter,
+                          ApiKeyFilter apiKeyFilter) {
         this.jwtAuthFilter = jwtAuthFilter;
+        this.apiKeyFilter = apiKeyFilter;
     }
 
     @Bean
@@ -42,6 +46,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/articles/**").authenticated()
                         .anyRequest().authenticated()
                 )
+                .addFilterBefore(apiKeyFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
