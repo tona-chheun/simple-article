@@ -6,7 +6,7 @@ import com.example.simplearticle.response.ArticleResponse;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ArticleMapper {
+public class ArticleMapper implements DataMapper<Article, ArticleRequest, ArticleResponse>{
     public ArticleResponse toResponse(Article article) {
         return new ArticleResponse(
                 article.getId(),
@@ -17,10 +17,10 @@ public class ArticleMapper {
         );
     }
 
-    public Article toEntity(ArticleRequest request) {
+    public Article toEntity(ArticleRequest payload) {
         Article article = new Article();
-        article.setTitle(request.title());
-        article.setContent(request.content());
+        article.setTitle(payload.title());
+        article.setContent(payload.content());
 
         return article;
     }

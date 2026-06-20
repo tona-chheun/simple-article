@@ -18,21 +18,6 @@ public class Article extends EntitySoftDelete {
     @OneToMany(mappedBy = "article", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
-    public Article() {
-
-    }
-
-    public Article(String title, String content) {
-        this.title = title;
-        this.content = content;
-    }
-
-    public Article(Long id, String title, String content) {
-        this.id = id;
-        this.title = title;
-        this.content = content;
-    }
-
     public Long getId() {
         return id;
     }

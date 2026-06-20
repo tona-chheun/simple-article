@@ -18,13 +18,6 @@ public class Comment extends EntitySoftDelete {
     @JoinColumn(name = "article_id", nullable = false)
     private Article article;
 
-    public Comment() {}
-
-    public Comment(String content, Article article) {
-        this.content = content;
-        this.article = article;
-    }
-
     public UUID getId() {
         return id;
     }
