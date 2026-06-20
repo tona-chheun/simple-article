@@ -12,8 +12,8 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("My API")
+                        .title("Article API")
                         .version("1.0")
-                        .description("Spring Boot API documentation"));
+                        .description("Article API documentation"));
     }
 }
