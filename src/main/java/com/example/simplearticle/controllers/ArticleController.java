@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("articles")
+@RequestMapping("api/articles")
 public class ArticleController {
     private final ArticleService articleService;
 
@@ -25,7 +25,7 @@ public class ArticleController {
         List<ArticleResponse> articles =  this.articleService.getAll();
         return ResponseEntity.ok(new ApiResponse<>(
                 true,
-                "Article retrieved successfully",
+                "Articles retrieved successfully",
                 articles
         ));
     }
@@ -64,8 +64,12 @@ public class ArticleController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id) {
+    public ResponseEntity<ApiResponse<ArticleResponse>> delete(@PathVariable Long id) {
         articleService.delete(id);
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Article deleted successfully",
+                null
+        ));
     }
 }
