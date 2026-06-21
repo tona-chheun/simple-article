@@ -38,7 +38,7 @@ public class GlobalExceptionHandler {
                 .forEach(error ->
                         errors.put(error.getField(), error.getDefaultMessage()));
 
-        return ResponseEntity.unprocessableContent()
+        return ResponseEntity.unprocessableEntity()
                 .body(new ApiResponse<>(
                         false,
                         "Validation failed",

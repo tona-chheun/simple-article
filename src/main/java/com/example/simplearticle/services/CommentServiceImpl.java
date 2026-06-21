@@ -41,12 +41,33 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentResponse create(Long articleId, CommentRequest request) {
+    public CommentResponse findById(UUID id) {
+        Comment comment = commentRepository
+                .findByIdAndDeletedAtIsNull(id)
+                .orElseThrow(() -> new RecordNotFoundException(id));
+        return this.commentMapper.toResponse(comment);
+    }
+
+    @Override
+    public CommentResponse create(Long articleId, CommentRequest payload) {
         Article article = articleRepository
                 .findByIdAndDeletedAtIsNull(articleId)
                 .orElseThrow(() -> new RecordNotFoundException(articleId));
-        Comment comment = commentRepository.save(this.commentMapper.toEntity(request, article));
+        Comment comment = commentRepository.save(this.commentMapper.toEntity(payload, article));
         return this.commentMapper.toResponse(comment);
+    }
+
+    @Override
+    public CommentResponse update(Long articleId, UUID commentId, CommentRequest payload) {
+        Article article = articleRepository
+                .findByIdAndDeletedAtIsNull(articleId)
+                .orElseThrow(() -> new RecordNotFoundException(articleId));
+        Comment comment = commentRepository
+                .findByIdAndDeletedAtIsNull(commentId)
+                .orElseThrow(() -> new RecordNotFoundException(commentId));
+
+        comment.setContent(payload.content());
+        return this.commentMapper.toResponse(this.commentRepository.save(comment));
     }
 
     @Override
