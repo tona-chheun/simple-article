@@ -1,6 +1,7 @@
 package com.example.simplearticle.repositories;
 
 import com.example.simplearticle.models.Article;
+import jakarta.validation.constraints.NotNull;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,7 @@ public class ArticleRepositoryTest {
     @Test
     @DisplayName("Should create article")
     void shouldCreateArticle() {
-        Article article = new Article();
-        article.setTitle("Java");
-        article.setContent("Java content");
-
-        Article saved = articleRepository.save(article);
+        Article saved = articleRepository.save(mockArticle("Java", "Java content"));
 
         assertThat(saved.getId()).isNotNull();
         assertThat(saved.getTitle()).isEqualTo("Java");
@@ -36,10 +33,7 @@ public class ArticleRepositoryTest {
     @Test
     @DisplayName("Should find article by id")
     void shouldFindArticleById() {
-        Article article = new Article();
-        article.setTitle("Java");
-        article.setContent("Java Content");
-        Article articleSaved = articleRepository.save(article);
+        Article articleSaved = articleRepository.save(mockArticle("Java", "Java Content"));
 
         Optional<Article> found = articleRepository.findById(articleSaved.getId());
 
@@ -50,14 +44,9 @@ public class ArticleRepositoryTest {
     @Test
     @DisplayName("Should find only articles not soft deleted")
     void shouldFindByDeletedAtIsNull() {
-        Article article = new Article();
-        article.setTitle("Java");
-        article.setContent("Java Content");
-        Article active = articleRepository.save(article);
+        Article active = articleRepository.save(mockArticle("Java", "Java Content"));
 
-        Article deleted = new Article();
-        deleted.setTitle("Deleted Article");
-        deleted.setContent("Deleted content");
+        Article deleted = mockArticle("Deleted Article", "Deleted content");
         deleted.setDeletedAt(LocalDateTime.now());
         articleRepository.save(deleted);
 
@@ -70,10 +59,7 @@ public class ArticleRepositoryTest {
     @Test
     @DisplayName("Should find by id and deletedAt is null")
     void shouldFindByIdAndDeletedAtIsNull() {
-        Article article = new Article();
-        article.setTitle("Find Me");
-        article.setContent("Content");
-        Article articleSaved = articleRepository.save(article);
+        Article articleSaved = articleRepository.save(mockArticle("Find Me", "Content"));
 
         Optional<Article> found =
                 articleRepository.findByIdAndDeletedAtIsNull(articleSaved.getId());
@@ -85,9 +71,7 @@ public class ArticleRepositoryTest {
     @Test
     @DisplayName("Should not find soft deleted article by id")
     void shouldNotFindSoftDeletedArticleById() {
-        Article article = new Article();
-        article.setTitle("Soft Deleted");
-        article.setContent("Content");
+        Article article = mockArticle("Soft Deleted", "Content");
         article.setDeletedAt(LocalDateTime.now());
 
         Article saved = articleRepository.save(article);
@@ -101,10 +85,7 @@ public class ArticleRepositoryTest {
     @Test
     @DisplayName("Should update article")
     void shouldUpdateArticle() {
-        Article article = new Article();
-        article.setTitle("Old Title");
-        article.setContent("Old Content");
-        Article articleSaved = articleRepository.save(article);
+        Article articleSaved = articleRepository.save(mockArticle("Old Title", "Old Content"));
 
         articleSaved.setTitle("New Title");
         articleSaved.setContent("New Content");
@@ -118,15 +99,19 @@ public class ArticleRepositoryTest {
     @Test
     @DisplayName("Should delete article permanently")
     void shouldDeleteArticle() {
-        Article article = new Article();
-        article.setTitle("Delete Me");
-        article.setContent("Content");
-        Article articleSaved = articleRepository.save(article);
+        Article articleSaved = articleRepository.save(mockArticle("Delete Me", "Content"));
 
         articleRepository.deleteById(articleSaved.getId());
 
         Optional<Article> found = articleRepository.findById(articleSaved.getId());
 
         assertThat(found).isEmpty();
+    }
+
+    private Article mockArticle(String title, String content) {
+        Article article = new Article();
+        article.setTitle(title);
+        article.setContent(content);
+        return article;
     }
 }
