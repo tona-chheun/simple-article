@@ -12,7 +12,7 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/articles/{articleId}/comments")
+@RequestMapping("articles/{articleId}/comments")
 public class CommentController {
     private final CommentService commentService;
 

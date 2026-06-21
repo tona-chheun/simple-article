@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public interface CommentService {
     List<CommentResponse> findByArticle(Long articleId);
-    CommentResponse create(Long articleId, CommentRequest request);
+    CommentResponse findById(UUID id);
+    CommentResponse create(Long articleId, CommentRequest payload);
+    CommentResponse update(Long articleId, UUID commentId, CommentRequest payload);
     void delete(Long articleId, UUID commentId);
 }
