@@ -5,10 +5,19 @@ import com.example.simplearticle.response.ApiResponse;
 import com.example.simplearticle.response.ArticleResponse;
 import com.example.simplearticle.services.ArticleService;
 import jakarta.validation.Valid;
-import org.springframework.http.HttpStatus;
+import org.springframework.batch.core.job.Job;
+import org.springframework.batch.core.job.JobExecution;
+import org.springframework.batch.core.job.parameters.JobParameters;
+import org.springframework.batch.core.job.parameters.JobParametersBuilder;
+import org.springframework.batch.core.launch.JobOperator;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -16,8 +25,18 @@ import java.util.List;
 public class ArticleController {
     private final ArticleService articleService;
 
-    public ArticleController(ArticleService articleService) {
+    private final JobOperator jobOperator;
+    private final Job importArticleJob;
+
+    public ArticleController(
+            ArticleService articleService,
+            JobOperator jobOperator,
+            Job importArticleJob
+    ) {
         this.articleService = articleService;
+
+        this.jobOperator = jobOperator;
+        this.importArticleJob = importArticleJob;
     }
 
     @GetMapping
@@ -47,6 +66,35 @@ public class ArticleController {
                 true,
                 "Article created successfully",
                 article
+        ));
+    }
+
+    @PostMapping(
+            value = "/import",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
+    )
+    public ResponseEntity<ApiResponse<String>> importArticles(@RequestParam("file") MultipartFile file) throws Exception {
+
+        Path uploadDir = Paths.get("uploads");
+        Files.createDirectories(uploadDir);
+
+        Path filePath = uploadDir.resolve(
+                System.currentTimeMillis() + "_" + file.getOriginalFilename()
+        );
+
+        file.transferTo(filePath);
+        JobParameters params = new JobParametersBuilder()
+                .addString("filePath", filePath.toAbsolutePath().toString())
+                .addLong("time", System.currentTimeMillis())
+                .toJobParameters();
+
+        JobExecution execution =
+                jobOperator.start(importArticleJob, params);
+
+        return ResponseEntity.ok(new ApiResponse<>(
+                true,
+                "Job started with execution id: " + execution.getId(),
+                null
         ));
     }
 
