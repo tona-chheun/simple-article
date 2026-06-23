@@ -1,5 +1,7 @@
 package com.example.simplearticle.config;
 
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.method.HandlerTypePredicate;
@@ -15,5 +17,12 @@ public class WebConfig implements WebMvcConfigurer {
                 "/api",
                 HandlerTypePredicate.forAnnotation(RestController.class)
         );
+    }
+
+    @Bean
+    public JsonMapper jsonMapper() {
+        return JsonMapper.builder()
+                .findAndAddModules()
+                .build();
     }
 }

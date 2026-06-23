@@ -1,5 +1,6 @@
 package com.example.simplearticle.services;
 
+import com.example.simplearticle.annotations.Auditable;
 import com.example.simplearticle.exceptions.RecordNotFoundException;
 import com.example.simplearticle.mappers.ArticleMapper;
 import com.example.simplearticle.models.Article;
@@ -38,12 +39,14 @@ public class ArticleServiceImpl implements ArticleService {
         return this.articleMapper.toResponse(article);
     }
 
+    @Auditable(action = "CREATE", module = "ARTICLE")
     @Override
     public ArticleResponse create(ArticleRequest payload) {
         Article article = this.articleRepository.save(this.articleMapper.toEntity(payload));
         return this.articleMapper.toResponse(article);
     }
 
+    @Auditable(action = "UPDATE", module = "ARTICLE")
     @Override
     public ArticleResponse update(Long id, ArticleRequest payload) {
         Article article = articleRepository.findByIdAndDeletedAtIsNull(id)
@@ -53,6 +56,7 @@ public class ArticleServiceImpl implements ArticleService {
         return this.articleMapper.toResponse(this.articleRepository.save(article));
     }
 
+    @Auditable(action = "DELETE", module = "ARTICLE")
     @Override
     public void delete(Long id) {
         Article article = articleRepository.findByIdAndDeletedAtIsNull(id)
