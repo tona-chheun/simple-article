@@ -80,11 +80,11 @@ public class AuthorizationServerConfig {
                 .clientId("other-system")
                 .clientSecret("{noop}secret123")
                 .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
-
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_POST)
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .authorizationGrantType(AuthorizationGrantType.REFRESH_TOKEN)
 
-                .redirectUri("http://localhost:3000/login/oauth2/code/article-api")
+                .redirectUri("http://localhost:3000/callback")
 
                 .scope(OidcScopes.OPENID)
                 .scope(OidcScopes.PROFILE)
