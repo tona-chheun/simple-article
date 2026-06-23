@@ -16,15 +16,12 @@ import java.time.LocalDateTime;
 public class AuditAspect {
 
     private final AuditService auditService;
-    //private final ObjectMapper objectMapper;
     private final JsonMapper jsonMapper;
 
     public AuditAspect(AuditService auditService,
-                       ObjectMapper objectMapper,
                        JsonMapper jsonMapper
     ) {
         this.auditService = auditService;
-        // this.objectMapper = objectMapper;
         this.jsonMapper = jsonMapper;
     }
 
