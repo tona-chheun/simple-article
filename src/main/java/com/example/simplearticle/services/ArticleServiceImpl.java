@@ -1,11 +1,12 @@
 package com.example.simplearticle.services;
 
 import com.example.simplearticle.exceptions.RecordNotFoundException;
-import com.example.simplearticle.mappers.ArticleMapper;
 import com.example.simplearticle.models.Article;
 import com.example.simplearticle.repositories.ArticleRepository;
-import com.example.simplearticle.requests.ArticleRequest;
-import com.example.simplearticle.response.ArticleResponse;
+import com.example.simplearticle.soap.ArticleResponse;
+import com.example.simplearticle.soap.CreateArticleRequest;
+import com.example.simplearticle.soap.GetAllArticlesResponse;
+import com.example.simplearticle.soap.UpdateArticleRequest;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -14,43 +15,43 @@ import java.util.List;
 @Service
 public class ArticleServiceImpl implements ArticleService {
     private final ArticleRepository articleRepository;
-    private final ArticleMapper articleMapper;
 
     public ArticleServiceImpl(
-            ArticleRepository articleRepository,
-            ArticleMapper articleMapper
+            ArticleRepository articleRepository
     ) {
         this.articleRepository = articleRepository;
-        this.articleMapper = articleMapper;
     }
 
     @Override
-    public List<ArticleResponse> getAll() {
-        return this.articleRepository.findByDeletedAtIsNull()
+    public GetAllArticlesResponse getAll() {
+        List<ArticleResponse> articles = this.articleRepository.findByDeletedAtIsNull()
                 .stream()
-                .map(articleMapper::toResponse)
+                .map(this::mapResponse)
                 .toList();
+        GetAllArticlesResponse articlesResponse = new GetAllArticlesResponse();
+        articlesResponse.setArticles(articles);
+        return articlesResponse;
     }
 
     @Override
     public ArticleResponse findById(Long id) {
         Article article = this.articleRepository.findByIdAndDeletedAtIsNull(id).orElseThrow(() -> new RecordNotFoundException(id));
-        return this.articleMapper.toResponse(article);
+        return mapResponse(article);
     }
 
     @Override
-    public ArticleResponse create(ArticleRequest payload) {
-        Article article = this.articleRepository.save(this.articleMapper.toEntity(payload));
-        return this.articleMapper.toResponse(article);
+    public ArticleResponse create(CreateArticleRequest payload) {
+        Article savedArticle = this.articleRepository.save(mapArticle(payload));
+        return mapResponse(savedArticle);
     }
 
     @Override
-    public ArticleResponse update(Long id, ArticleRequest payload) {
-        Article article = articleRepository.findByIdAndDeletedAtIsNull(id)
-                .orElseThrow(() -> new RecordNotFoundException(id));
-        article.setTitle(payload.title());
-        article.setContent(payload.content());
-        return this.articleMapper.toResponse(this.articleRepository.save(article));
+    public ArticleResponse update(UpdateArticleRequest payload) {
+        Article article = articleRepository.findByIdAndDeletedAtIsNull(payload.getId())
+                .orElseThrow(() -> new RecordNotFoundException(payload.getId()));
+        article.setTitle(payload.getTitle());
+        article.setContent(payload.getContent());
+        return mapResponse(this.articleRepository.save(article));
     }
 
     @Override
@@ -60,5 +61,20 @@ public class ArticleServiceImpl implements ArticleService {
 
         article.setDeletedAt(LocalDateTime.now());
         articleRepository.save(article);
+    }
+
+    private Article mapArticle(CreateArticleRequest payload) {
+        Article article = new Article();
+        article.setTitle(payload.getTitle());
+        article.setContent(payload.getContent());
+        return article;
+    }
+
+    private ArticleResponse mapResponse(Article article) {
+        ArticleResponse response = new ArticleResponse();
+        response.setId(article.getId());
+        response.setTitle(article.getTitle());
+        response.setContent(article.getContent());
+        return response;
     }
 }

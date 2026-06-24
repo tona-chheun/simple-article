@@ -1,15 +1,14 @@
 package com.example.simplearticle.services;
 
-import com.example.simplearticle.models.Article;
-import com.example.simplearticle.requests.ArticleRequest;
-import com.example.simplearticle.response.ArticleResponse;
-
-import java.util.List;
+import com.example.simplearticle.soap.ArticleResponse;
+import com.example.simplearticle.soap.CreateArticleRequest;
+import com.example.simplearticle.soap.GetAllArticlesResponse;
+import com.example.simplearticle.soap.UpdateArticleRequest;
 
 public interface ArticleService {
-    List<ArticleResponse> getAll();
+    GetAllArticlesResponse getAll();
     ArticleResponse findById(Long id);
-    ArticleResponse create(ArticleRequest articleRequest);
-    ArticleResponse update(Long id, ArticleRequest articleRequest);
+    ArticleResponse create(CreateArticleRequest request);
+    ArticleResponse update(UpdateArticleRequest request);
     void delete(Long id);
 }
