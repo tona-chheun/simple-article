@@ -24,12 +24,26 @@ spring:
               filters:
                 - StripPrefix=1
 
+            - id: auth-docs
+              uri: lb://AUTH-SERVICE
+              predicates:
+                - Path=/auth-service/v3/api-docs
+              filters:
+                - RewritePath=/auth-service/v3/api-docs, /v3/api-docs
+
             - id: article-service
               uri: lb://ARTICLE-SERVICE
               predicates:
                 - Path=/api/articles/**
               filters:
                 - StripPrefix=1
+
+            - id: article-docs
+              uri: lb://ARTICLE-SERVICE
+              predicates:
+                - Path=/article-service/v3/api-docs
+              filters:
+                - RewritePath=/article-service/v3/api-docs, /v3/api-docs
 
             - id: notification-service
               uri: lb://NOTIFICATION-SERVICE
@@ -45,3 +59,12 @@ eureka:
 
 jwt:
   secret: "my-super-secret-key-my-super-secret-key-123456"
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+    urls:
+      - name: auth-service
+        url: /auth-service/v3/api-docs
+      - name: article-service
+        url: /article-service/v3/api-docs
