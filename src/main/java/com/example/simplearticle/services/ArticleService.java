@@ -1,6 +1,5 @@
 package com.example.simplearticle.services;
 
-import com.example.simplearticle.models.Article;
 import com.example.simplearticle.requests.ArticleRequest;
 import com.example.simplearticle.response.ArticleResponse;
 

@@ -1,0 +1,25 @@
+scalar DateTime
+
+type ArticleResponse {
+  id: ID!
+  title: String!
+  content: String!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+input ArticleRequest {
+  title: String!
+  content: String!
+}
+
+type Query {
+  articles: [ArticleResponse!]!
+  article(id: ID!): ArticleResponse
+}
+
+type Mutation {
+  createArticle(input: ArticleRequest!): ArticleResponse!
+  updateArticle(id: ID!, input: ArticleRequest!): ArticleResponse!
+  deleteArticle(id: ID!): Boolean!
+}
