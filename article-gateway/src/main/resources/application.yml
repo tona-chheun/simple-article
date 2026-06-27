@@ -27,9 +27,9 @@ spring:
             - id: auth-docs
               uri: lb://AUTH-SERVICE
               predicates:
-                - Path=/auth-service/v3/api-docs
+                - Path=/auth/v3/api-docs
               filters:
-                - RewritePath=/auth-service/v3/api-docs, /v3/api-docs
+                - RewritePath=/auth/v3/api-docs, /v3/api-docs
 
             - id: article-service
               uri: lb://ARTICLE-SERVICE
@@ -41,9 +41,9 @@ spring:
             - id: article-docs
               uri: lb://ARTICLE-SERVICE
               predicates:
-                - Path=/article-service/v3/api-docs
+                - Path=/article/v3/api-docs
               filters:
-                - RewritePath=/article-service/v3/api-docs, /v3/api-docs
+                - RewritePath=/article/v3/api-docs, /v3/api-docs
 
             - id: notification-service
               uri: lb://NOTIFICATION-SERVICE
@@ -64,7 +64,7 @@ springdoc:
   swagger-ui:
     path: /swagger-ui.html
     urls:
-      - name: auth-service
-        url: /auth-service/v3/api-docs
-      - name: article-service
-        url: /article-service/v3/api-docs
+      - name: Auth Service
+        url: /auth/v3/api-docs
+      - name: Article Service
+        url: /article/v3/api-docs
