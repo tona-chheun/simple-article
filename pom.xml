@@ -11,6 +11,7 @@
     <modules>
         <module>eureka-server</module>
         <module>article-gateway</module>
+        <module>auth-service</module>
         <module>article-service</module>
         <module>notification-service</module>
     </modules>
