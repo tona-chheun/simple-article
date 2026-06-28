@@ -1,9 +1,10 @@
 package com.example.simplearticle.resolvers;
 
-import com.example.simplearticle.models.Article;
+import com.example.simplearticle.requests.ArticleRequest;
 import com.example.simplearticle.response.ArticleResponse;
 import com.example.simplearticle.services.ArticleService;
 import org.springframework.graphql.data.method.annotation.Argument;
+import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 
@@ -25,5 +26,24 @@ public class ArticleGraphQLController {
     @QueryMapping
     public ArticleResponse article(@Argument Long id) {
         return articleService.findById(id);
+    }
+
+    @MutationMapping
+    public ArticleResponse createArticle(@Argument ArticleRequest input) {
+        return articleService.create(input);
+    }
+
+    @MutationMapping
+    public ArticleResponse updateArticle(
+            @Argument Long id,
+            @Argument ArticleRequest input
+    ) {
+        return articleService.update(id, input);
+    }
+
+    @MutationMapping
+    public Boolean deleteArticle(@Argument Long id) {
+        articleService.delete(id);
+        return true;
     }
 }
