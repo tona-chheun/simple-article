@@ -5,7 +5,12 @@ import com.example.simplearticle.mappers.ArticleMapper;
 import com.example.simplearticle.models.Article;
 import com.example.simplearticle.repositories.ArticleRepository;
 import com.example.simplearticle.requests.ArticleRequest;
+import com.example.simplearticle.response.ArticlePageResponse;
 import com.example.simplearticle.response.ArticleResponse;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -25,11 +30,26 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleResponse> getAll() {
-        return this.articleRepository.findByDeletedAtIsNull()
+    public ArticlePageResponse getAll(int page, int size) {
+        Pageable pageable = PageRequest.of(
+                page,
+                size,
+                Sort.by(Sort.Direction.DESC, "createdAt")
+        );
+        Page<Article> articlePage = this.articleRepository.findByDeletedAtIsNull(pageable);
+        List<ArticleResponse> content = articlePage.getContent()
                 .stream()
                 .map(articleMapper::toResponse)
                 .toList();
+        return new ArticlePageResponse(
+                content,
+                articlePage.getNumber(),
+                articlePage.getSize(),
+                articlePage.getTotalElements(),
+                articlePage.getTotalPages(),
+                articlePage.hasNext(),
+                articlePage.hasPrevious()
+        );
     }
 
     @Override

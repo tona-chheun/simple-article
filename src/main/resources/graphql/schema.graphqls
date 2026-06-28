@@ -1,4 +1,5 @@
 scalar DateTime
+scalar Long
 
 type ArticleResponse {
   id: ID!
@@ -8,13 +9,23 @@ type ArticleResponse {
   updatedAt: DateTime
 }
 
+type ArticlePageResponse {
+  content: [ArticleResponse!]!
+  page: Int!
+  size: Int!
+  totalElements: Long!
+  totalPages: Int!
+  hasNext: Boolean!
+  hasPrevious: Boolean!
+}
+
 input ArticleRequest {
   title: String!
   content: String!
 }
 
 type Query {
-  articles: [ArticleResponse!]!
+  articles(page: Int = 0, size: Int = 10): ArticlePageResponse!
   article(id: ID!): ArticleResponse
 }
 

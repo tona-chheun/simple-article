@@ -1,6 +1,7 @@
 package com.example.simplearticle.resolvers;
 
 import com.example.simplearticle.requests.ArticleRequest;
+import com.example.simplearticle.response.ArticlePageResponse;
 import com.example.simplearticle.response.ArticleResponse;
 import com.example.simplearticle.services.ArticleService;
 import org.springframework.graphql.data.method.annotation.Argument;
@@ -19,8 +20,11 @@ public class ArticleGraphQLController {
     }
 
     @QueryMapping
-    public List<ArticleResponse> articles() {
-        return articleService.getAll();
+    public ArticlePageResponse articles(
+            @Argument int page,
+            @Argument int size
+    ) {
+        return articleService.getAll(page, size);
     }
 
     @QueryMapping
