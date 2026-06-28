@@ -5,6 +5,7 @@ import com.example.simplearticle.mappers.ArticleMapper;
 import com.example.simplearticle.models.Article;
 import com.example.simplearticle.repositories.ArticleRepository;
 import com.example.simplearticle.requests.ArticleRequest;
+import com.example.simplearticle.response.ApiResponse;
 import com.example.simplearticle.response.ArticlePageResponse;
 import com.example.simplearticle.response.ArticleResponse;
 import org.springframework.data.domain.Page;
@@ -53,9 +54,15 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleResponse findById(Long id) {
-        Article article = this.articleRepository.findByIdAndDeletedAtIsNull(id).orElseThrow(() -> new RecordNotFoundException(id));
-        return this.articleMapper.toResponse(article);
+    public ApiResponse<ArticleResponse> findById(Long id) {
+        // return this.articleMapper.toResponse(article);
+        return this.articleRepository.findByIdAndDeletedAtIsNull(id)
+                .map(article -> new ApiResponse<ArticleResponse>(
+                        true,
+                        "Success",
+                        articleMapper.toResponse(article)
+                ))
+                .orElse(new ApiResponse<>(false, "Record not found with id " + id, null));
     }
 
     @Override

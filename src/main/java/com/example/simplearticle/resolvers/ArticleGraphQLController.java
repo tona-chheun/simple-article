@@ -1,6 +1,7 @@
 package com.example.simplearticle.resolvers;
 
 import com.example.simplearticle.requests.ArticleRequest;
+import com.example.simplearticle.response.ApiResponse;
 import com.example.simplearticle.response.ArticlePageResponse;
 import com.example.simplearticle.response.ArticleResponse;
 import com.example.simplearticle.services.ArticleService;
@@ -28,7 +29,7 @@ public class ArticleGraphQLController {
     }
 
     @QueryMapping
-    public ArticleResponse article(@Argument Long id) {
+    public ApiResponse<ArticleResponse> article(@Argument Long id) {
         return articleService.findById(id);
     }
 

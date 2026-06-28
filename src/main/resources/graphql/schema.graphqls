@@ -9,6 +9,12 @@ type ArticleResponse {
   updatedAt: DateTime
 }
 
+type ApiResponse {
+    success: Boolean!
+    message: String
+    data: ArticleResponse
+}
+
 type ArticlePageResponse {
   content: [ArticleResponse!]!
   page: Int!
@@ -26,7 +32,7 @@ input ArticleRequest {
 
 type Query {
   articles(page: Int = 0, size: Int = 10): ArticlePageResponse!
-  article(id: ID!): ArticleResponse
+  article(id: ID!): ApiResponse
 }
 
 type Mutation {
