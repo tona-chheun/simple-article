@@ -1,11 +1,11 @@
 package com.example.simplearticle.response;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 public record ArticleResponse(
         Long id,
         String title,
         String content,
-        LocalDateTime createdAt,
-        LocalDateTime updatedAt
+        OffsetDateTime createdAt,
+        OffsetDateTime updatedAt
 ) {}

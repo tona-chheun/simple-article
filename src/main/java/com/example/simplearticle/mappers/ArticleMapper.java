@@ -5,6 +5,8 @@ import com.example.simplearticle.requests.ArticleRequest;
 import com.example.simplearticle.response.ArticleResponse;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneOffset;
+
 @Component
 public class ArticleMapper implements DataMapper<Article, ArticleRequest, ArticleResponse>{
     public ArticleResponse toResponse(Article article) {
@@ -12,8 +14,8 @@ public class ArticleMapper implements DataMapper<Article, ArticleRequest, Articl
                 article.getId(),
                 article.getTitle(),
                 article.getContent(),
-                article.getCreatedAt(),
-                article.getUpdatedAt()
+                article.getCreatedAt().atOffset(ZoneOffset.UTC),
+                article.getUpdatedAt().atOffset(ZoneOffset.UTC)
         );
     }
 

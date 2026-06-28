@@ -2,10 +2,10 @@ scalar DateTime
 
 type ArticleResponse {
   id: ID!
-  title: String!
-  content: String!
-  createdAt: DateTime!
-  updatedAt: DateTime!
+  title: String
+  content: String
+  createdAt: DateTime
+  updatedAt: DateTime
 }
 
 input ArticleRequest {
