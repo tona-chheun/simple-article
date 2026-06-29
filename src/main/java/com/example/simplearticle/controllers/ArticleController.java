@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -44,8 +45,11 @@ public class ArticleController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ArticleResponse>> create(@Valid @RequestBody ArticleRequest payload) {
-        ArticleResponse article = this.articleService.create(payload);
+    public ResponseEntity<ApiResponse<ArticleResponse>> create(
+            @Valid @RequestBody ArticleRequest payload,
+            Authentication authentication
+            ) {
+        ArticleResponse article = this.articleService.create(payload, authentication);
         return ResponseEntity.ok(new ApiResponse<>(
                 true,
                 "Article created successfully",
