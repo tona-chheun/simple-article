@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+    <meta charset="UTF-8">
+    <title layout:title-pattern="$CONTENT_TITLE - Spring MVC">
+        Spring MVC
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="min-h-screen flex flex-col bg-gray-100">
+
+<nav class="bg-blue-600 text-white">
+    <div class="container mx-auto px-6 py-4 flex justify-between">
+        <h1 class="font-bold text-xl">
+            Spring MVC
+        </h1>
+
+        <div class="space-x-4">
+            <a th:href="@{/}" class="hover:underline">Home</a>
+            <a th:href="@{/articles}" class="hover:underline">Articles</a>
+        </div>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<main class="container mx-auto flex-1 px-6 py-8">
+    <div layout:fragment="content"></div>
+</main>
+
+<footer class="bg-white border-t">
+    <div class="container mx-auto py-4 text-center text-gray-500">
+        © 2026 Spring MVC
+    </div>
+</footer>
+
+</body>
+</html>

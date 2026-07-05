@@ -1,44 +1,52 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+
 <head>
     <title>Articles</title>
 </head>
+
 <body>
 
-<h2>Article List</h2>
+<div layout:fragment="content">
 
-<a th:href="@{/articles/create}">Create Article</a>
+    <div class="flex justify-between mb-6">
+        <h2 class="text-2xl font-bold">
+            Articles
+        </h2>
 
-<table border="1">
-    <thead>
-    <tr>
-        <th>ID</th>
-        <th>Title</th>
-        <th>Content</th>
-        <th>Action</th>
-    </tr>
-    </thead>
+        <a th:href="@{/articles/create}"
+           class="bg-blue-600 text-white px-4 py-2 rounded">
+            Create
+        </a>
+    </div>
 
-    <tbody>
-    <tr th:each="article : ${articles}">
-        <td th:text="${article.id}"></td>
-        <td th:text="${article.title}"></td>
-        <td th:text="${article.content}"></td>
-        <td>
-            <a th:href="@{/articles/{id}/edit(id=${article.id})}">
-                Edit
-            </a>
+    <table class="w-full border">
+        <thead class="bg-gray-200">
+        <tr>
+            <th class="p-2">ID</th>
+            <th class="p-2">Title</th>
+            <th class="p-2">Action</th>
+        </tr>
+        </thead>
 
-            <form th:action="@{/articles/{id}/delete(id=${article.id})}"
-                  method="post"
-                  style="display:inline;">
-                <button type="submit">Delete</button>
-            </form>
-        </td>
-    </tr>
-    </tbody>
+        <tbody>
+        <tr th:each="article : ${articles}">
+            <td class="border p-2" th:text="${article.id}"></td>
+            <td class="border p-2" th:text="${article.title}"></td>
+            <td class="border p-2">
+                <a th:href="@{/articles/{id}/edit(id=${article.id})}"
+                   class="text-blue-600">
+                    Edit
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
 
-</table>
+</div>
 
 </body>
 </html>

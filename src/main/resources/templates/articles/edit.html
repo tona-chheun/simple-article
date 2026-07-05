@@ -1,35 +1,69 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout}">
+
 <head>
-    <meta charset="UTF-8">
     <title>Edit Article</title>
 </head>
+
 <body>
 
-<h2>Edit Article</h2>
+<div layout:fragment="content">
 
-<form th:action="@{/articles/{id}(id=${article.id})}"
-      th:object="${article}"
-      method="post">
+    <div class="max-w-3xl mx-auto bg-white rounded-lg shadow p-6">
 
-    <div>
-        <label>Title</label><br>
-        <input type="text" th:field="*{title}" />
+        <h2 class="text-2xl font-bold mb-6">
+            Edit Article
+        </h2>
+
+        <form th:action="@{/articles/{id}(id=${article.id})}"
+              th:object="${article}"
+              method="post"
+              class="space-y-6">
+
+            <div>
+                <label class="block mb-2 font-medium">
+                    Title
+                </label>
+
+                <input
+                        type="text"
+                        th:field="*{title}"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200">
+            </div>
+
+            <div>
+                <label class="block mb-2 font-medium">
+                    Content
+                </label>
+
+                <textarea
+                        th:field="*{content}"
+                        rows="8"
+                        class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                </textarea>
+            </div>
+
+            <div class="flex gap-3">
+                <button
+                        type="submit"
+                        class="rounded-lg bg-blue-600 px-5 py-2 text-white hover:bg-blue-700">
+                    Update
+                </button>
+
+                <a th:href="@{/articles}"
+                   class="rounded-lg bg-gray-300 px-5 py-2 hover:bg-gray-400">
+                    Cancel
+                </a>
+            </div>
+
+        </form>
+
     </div>
 
-    <br>
-
-    <div>
-        <label>Content</label><br>
-        <textarea th:field="*{content}" rows="8" cols="50"></textarea>
-    </div>
-
-    <br>
-
-    <button type="submit">Update</button>
-    <a th:href="@{/articles}">Cancel</a>
-
-</form>
+</div>
 
 </body>
 </html>
