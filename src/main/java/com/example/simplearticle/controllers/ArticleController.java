@@ -1,9 +1,11 @@
 package com.example.simplearticle.controllers;
 
-import com.example.simplearticle.models.Article;
+import com.example.simplearticle.requests.ArticleRequest;
 import com.example.simplearticle.services.ArticleService;
+import jakarta.validation.Valid;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -25,25 +27,38 @@ public class ArticleController {
 
     @GetMapping("/create")
     public String createForm(Model model) {
-        model.addAttribute("article", new Article());
+        model.addAttribute("articleRequest", new ArticleRequest());
         return "articles/create";
     }
 
     @PostMapping
-    public String store(@ModelAttribute Article article) {
-        articleService.create(article);
+    public String store(@Valid @ModelAttribute ArticleRequest articleRequest,
+                        BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "articles/create";
+        }
+
+        articleService.create(articleRequest);
         return "redirect:/articles";
     }
 
     @GetMapping("/{id}/edit")
     public String editForm(@PathVariable Long id, Model model) {
-        model.addAttribute("article", articleService.findById(id));
+        model.addAttribute("articleRequest", articleService.findById(id));
         return "articles/edit";
     }
 
     @PostMapping("/{id}")
-    public String update(@PathVariable Long id, @ModelAttribute Article article) {
-        articleService.update(id, article);
+    public String update(@PathVariable Long id,
+                         @Valid @ModelAttribute ArticleRequest articleRequest,
+                         BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            articleRequest.setId(id);
+            return "articles/edit";
+        }
+
+        articleService.update(id, articleRequest);
         return "redirect:/articles";
     }
 

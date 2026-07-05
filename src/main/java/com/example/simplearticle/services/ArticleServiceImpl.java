@@ -4,6 +4,7 @@ import com.example.simplearticle.exceptions.RecordNotFoundException;
 import com.example.simplearticle.mappers.ArticleMapper;
 import com.example.simplearticle.models.Article;
 import com.example.simplearticle.repositories.ArticleRepository;
+import com.example.simplearticle.requests.ArticleRequest;
 import com.example.simplearticle.response.ArticleResponse;
 import org.springframework.stereotype.Service;
 
@@ -38,12 +39,15 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public ArticleResponse create(Article article) {
+    public ArticleResponse create(ArticleRequest articleRequest) {
+        Article article = new Article();
+        article.setTitle(articleRequest.getTitle());
+        article.setContent(articleRequest.getContent());
         return this.articleMapper.toResponse(this.articleRepository.save(article));
     }
 
     @Override
-    public void update(Long id, Article payload) {
+    public void update(Long id, ArticleRequest payload) {
         Article article = articleRepository.findByIdAndDeletedAtIsNull(id)
                 .orElseThrow(() -> new RecordNotFoundException(id));
         article.setTitle(payload.getTitle());

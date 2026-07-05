@@ -19,7 +19,7 @@
         </h2>
 
         <form th:action="@{/articles}"
-              th:object="${article}"
+              th:object="${articleRequest}"
               method="post"
               class="space-y-6">
 
@@ -33,6 +33,9 @@
                         th:field="*{title}"
                         class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
                         placeholder="Article title">
+                <p th:if="${#fields.hasErrors('title')}"
+                   th:errors="*{title}"
+                   class="mt-1 text-sm text-red-600"></p>
             </div>
 
             <div>
@@ -46,6 +49,9 @@
                         class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200"
                         placeholder="Article content">
                 </textarea>
+                <p th:if="${#fields.hasErrors('content')}"
+                   th:errors="*{content}"
+                   class="mt-1 text-sm text-red-600"></p>
             </div>
 
             <div class="flex gap-3">

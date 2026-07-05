@@ -18,8 +18,8 @@
             Edit Article
         </h2>
 
-        <form th:action="@{/articles/{id}(id=${article.id})}"
-              th:object="${article}"
+        <form th:action="@{/articles/{id}(id=${articleRequest.id})}"
+              th:object="${articleRequest}"
               method="post"
               class="space-y-6">
 
@@ -32,6 +32,9 @@
                         type="text"
                         th:field="*{title}"
                         class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200">
+                <p th:if="${#fields.hasErrors('title')}"
+                   th:errors="*{title}"
+                   class="mt-1 text-sm text-red-600"></p>
             </div>
 
             <div>
@@ -44,6 +47,9 @@
                         rows="8"
                         class="w-full rounded-lg border border-gray-300 px-4 py-2 focus:border-blue-500 focus:ring focus:ring-blue-200">
                 </textarea>
+                <p th:if="${#fields.hasErrors('content')}"
+                   th:errors="*{content}"
+                   class="mt-1 text-sm text-red-600"></p>
             </div>
 
             <div class="flex gap-3">

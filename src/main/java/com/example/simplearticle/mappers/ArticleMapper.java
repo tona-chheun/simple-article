@@ -19,8 +19,8 @@ public class ArticleMapper implements DataMapper<Article, ArticleRequest, Articl
 
     public Article toEntity(ArticleRequest payload) {
         Article article = new Article();
-        article.setTitle(payload.title());
-        article.setContent(payload.content());
+        article.setTitle(payload.getTitle());
+        article.setContent(payload.getContent());
 
         return article;
     }
