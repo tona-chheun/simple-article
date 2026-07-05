@@ -1,123 +1,55 @@
 package com.example.simplearticle.controllers;
 
-import com.example.simplearticle.requests.ArticleRequest;
-import com.example.simplearticle.response.ApiResponse;
-import com.example.simplearticle.response.ArticleResponse;
+import com.example.simplearticle.models.Article;
 import com.example.simplearticle.services.ArticleService;
-import jakarta.validation.Valid;
-import org.springframework.batch.core.job.Job;
-import org.springframework.batch.core.job.JobExecution;
-import org.springframework.batch.core.job.parameters.JobParameters;
-import org.springframework.batch.core.job.parameters.JobParametersBuilder;
-import org.springframework.batch.core.launch.JobOperator;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-
-@RestController
+@Controller
 @RequestMapping("articles")
 public class ArticleController {
     private final ArticleService articleService;
 
-    private final JobOperator jobOperator;
-    private final Job importArticleJob;
-
     public ArticleController(
-            ArticleService articleService,
-            JobOperator jobOperator,
-            Job importArticleJob
+            ArticleService articleService
     ) {
         this.articleService = articleService;
-
-        this.jobOperator = jobOperator;
-        this.importArticleJob = importArticleJob;
     }
 
     @GetMapping
-    public ResponseEntity<ApiResponse<List<ArticleResponse>>> getAll() {
-        List<ArticleResponse> articles =  this.articleService.getAll();
-        return ResponseEntity.ok(new ApiResponse<>(
-                true,
-                "Articles retrieved successfully",
-                articles
-        ));
+    public String getAll(Model model) {
+        model.addAttribute("articles", this.articleService.getAll());
+        return "articles/list";
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<ArticleResponse>> findById(@PathVariable Long id) {
-        ArticleResponse article = this.articleService.findById(id);
-        return ResponseEntity.ok(new ApiResponse<>(
-                true,
-                "Article retrieved successfully",
-                article
-        ));
+    @GetMapping("/create")
+    public String createForm(Model model) {
+        model.addAttribute("article", new Article());
+        return "articles/create";
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<ArticleResponse>> create(@Valid @RequestBody ArticleRequest payload) {
-        ArticleResponse article = this.articleService.create(payload);
-        return ResponseEntity.ok(new ApiResponse<>(
-                true,
-                "Article created successfully",
-                article
-        ));
+    public String store(@ModelAttribute Article article) {
+        articleService.create(article);
+        return "redirect:/articles";
     }
 
-    @PostMapping(
-            value = "/import",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE
-    )
-    public ResponseEntity<ApiResponse<String>> importArticles(@RequestParam("file") MultipartFile file) throws Exception {
-
-        Path uploadDir = Paths.get("uploads");
-        Files.createDirectories(uploadDir);
-
-        Path filePath = uploadDir.resolve(
-                System.currentTimeMillis() + "_" + file.getOriginalFilename()
-        );
-
-        file.transferTo(filePath);
-        JobParameters params = new JobParametersBuilder()
-                .addString("filePath", filePath.toAbsolutePath().toString())
-                .addLong("time", System.currentTimeMillis())
-                .toJobParameters();
-
-        JobExecution execution =
-                jobOperator.start(importArticleJob, params);
-
-        return ResponseEntity.ok(new ApiResponse<>(
-                true,
-                "Job started with execution id: " + execution.getId(),
-                null
-        ));
+    @GetMapping("/{id}/edit")
+    public String editForm(@PathVariable Long id, Model model) {
+        model.addAttribute("article", articleService.findById(id));
+        return "articles/edit";
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<ApiResponse<ArticleResponse>> update(
-            @PathVariable Long id,
-            @Valid @RequestBody ArticleRequest payload
-    ) {
-        ArticleResponse article = this.articleService.update(id, payload);
-        return ResponseEntity.ok(new ApiResponse<>(
-                true,
-                "Article updated successfully",
-                article
-        ));
+    @PostMapping("/{id}")
+    public String update(@PathVariable Long id, @ModelAttribute Article article) {
+        articleService.update(id, article);
+        return "redirect:/articles";
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<ApiResponse<ArticleResponse>> delete(@PathVariable Long id) {
+    @PostMapping("/{id}/delete")
+    public String delete(@PathVariable Long id) {
         articleService.delete(id);
-        return ResponseEntity.ok(new ApiResponse<>(
-                true,
-                "Article deleted successfully",
-                null
-        ));
+        return "redirect:/articles";
     }
 }
